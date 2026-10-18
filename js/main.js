@@ -1,4 +1,5 @@
 "use strict";
+
 /*
  * Laboration 6 - Receptsökaren
  * Namn: Mia Höglund
@@ -57,6 +58,9 @@ async function handleSearch(event) {
 
     console.log(recipe);
 
+    //visa recept på sidan
+    displayRecipe(recipe);
+
     console.log(searchTerm);
 }
 
@@ -96,5 +100,44 @@ async function fetchRecipe(searchTerm) {
     const data = await response.json();
 
     return data;
+
+}
+
+//Skriver ut recept från webbsidan
+
+function displayRecipe(recipe) {
+
+    console.log("displayRecipe körs");
+
+    //rensar tidigare recept
+    recipeContainer.innerHTML = "";
+
+    //skapa article element
+    const article = document.createElement("article");
+    //rubrik
+    const heading = document.createElement("h3");
+    heading.textContent = recipe.name;
+    //bild
+    const image = document.createElement("img");
+    image.src = recipe.image;
+    image.alt = recipe.name;
+    //container för recepten
+    const recipeInfo = document.createElement("div");
+    recipeInfo.classList.add("recipe-info");
+
+    recipeInfo.innerHTML = `
+    <p><strong>Servings:</strong> ${recipe.servings}</p>
+    <p><strong>Prep time:</strong> ${recipe.prepTimeMinutes} minutes</p>
+    <p><strong>Cooking time:</strong> ${recipe.cookTimeMinutes} minutes</p>
+    <p><strong>Difficulty:</strong> ${recipe.difficulty}</p>
+    `;
+
+    //Elementen i article
+    article.appendChild(heading);
+    article.appendChild(image);
+    article.appendChild(recipeInfo);
+
+    //Lägg till article på sidan
+    recipeContainer.appendChild(article);
 
 }
