@@ -137,6 +137,26 @@ function displayRecipe(recipe) {
     article.appendChild(image);
     article.appendChild(recipeInfo);
 
+    //rubrik ingredienser
+    const ingredientsHeading = document.createElement("h4");
+    ingredientsHeading.textContent = "Ingredients";
+
+    //punktlista
+    const ingredientsList = document.createElement("ul");
+
+    //loop för ingredienserna samt listpunkter
+    recipe.ingredients.forEach((ingredient) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = ingredient;
+        ingredientsList.appendChild(listItem);
+
+
+    });
+
+    //lägg till ingredienser i article
+    article.appendChild(ingredientsHeading);
+    article.appendChild(ingredientsList);
+
     //Lägg till article på sidan
     recipeContainer.appendChild(article);
 
