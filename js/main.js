@@ -160,4 +160,22 @@ function displayRecipe(recipe) {
     //Lägg till article på sidan
     recipeContainer.appendChild(article);
 
+    //rubrik instruktioner
+    const instructionsHeading = document.createElement("h4");
+    instructionsHeading.textContent = "Instructions";
+
+    //lista numrerad
+    const instructionsList = document.createElement("ol");
+
+    //Loop genom instruktionerna
+    recipe.instructions.forEach((instruction) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = instruction;
+
+        instructionsList.appendChild(listItem);
+    });
+    //Rubrik och lista i article
+    article.appendChild(instructionsHeading);
+    article.appendChild(instructionsList);
+
 }
