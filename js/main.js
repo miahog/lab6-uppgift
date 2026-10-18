@@ -41,6 +41,22 @@ async function handleSearch(event) {
 
     console.log(data);
 
+    //Koll om API returnerar recept
+    if (data.recipes.length === 0) {
+        // ta bort tidigare recept
+        recipeContainer.innerHTML = "";
+
+        //visa meddelande för användaren
+        messageElement.textContent =
+            "Inget recept hittades. Prova en annan sökfras.";
+        return;
+    }
+
+    //hämta första recept från sökresultatet
+    const recipe = data.recipes[0];
+
+    console.log(recipe);
+
     console.log(searchTerm);
 }
 
@@ -80,7 +96,5 @@ async function fetchRecipe(searchTerm) {
     const data = await response.json();
 
     return data;
-
-
 
 }
