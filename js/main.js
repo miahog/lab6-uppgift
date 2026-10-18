@@ -36,32 +36,45 @@ async function handleSearch(event) {
     // Rensa tidigare meddelanden
     messageElement.textContent = "";
 
+    try {
 
-    // Hämta receptdata från API
-    const data = await fetchRecipe(searchTerm)
+        //hämta recept från API utifrån användarens sökfras
+        const data = await fetchRecipe(searchTerm);
 
-    console.log(data);
+        //Koll om API returnerar recept
+        if (data.recipes.length === 0) {
 
-    //Koll om API returnerar recept
-    if (data.recipes.length === 0) {
-        // ta bort tidigare recept
+            //ta bort tidigare recept
+            recipeContainer.innerHTML = "";
+
+            //visa meddelande om inga recept hittas
+            messageElement.textContent =
+                "Inget recept hittades. Prova en annan sökfras.";
+
+            return;
+        }
+
+        //Hämta första receptet från sökresultatet
+        const recipe = data.recipes[0];
+
+        //Visa recept på sidan
+        displayRecipe(recipe);
+
+
+    } catch (error) {
+
+        //skriv ut felinformation i konsolen
+        console.error(error);
+
+        //ta bort tidigare recept
         recipeContainer.innerHTML = "";
 
-        //visa meddelande för användaren
+        //visa felmeddelande
         messageElement.textContent =
-            "Inget recept hittades. Prova en annan sökfras.";
-        return;
+            "Kunde inte hämta recept. Försök igen senare.";
+
     }
 
-    //hämta första recept från sökresultatet
-    const recipe = data.recipes[0];
-
-    console.log(recipe);
-
-    //visa recept på sidan
-    displayRecipe(recipe);
-
-    console.log(searchTerm);
 }
 
 
@@ -96,6 +109,11 @@ async function fetchRecipe(searchTerm) {
         `https://dummyjson.com/recipes/search?q=${searchTerm}`
     );
 
+    //kontroll att servern svarar
+    if (!response.ok) {
+        throw new Error("Fel vid hämtning av recept.");
+    }
+
     //Ändra JSON svaret till JavaScript objekt
     const data = await response.json();
 
@@ -107,7 +125,6 @@ async function fetchRecipe(searchTerm) {
 
 function displayRecipe(recipe) {
 
-    console.log("displayRecipe körs");
 
     //rensar tidigare recept
     recipeContainer.innerHTML = "";
@@ -157,8 +174,7 @@ function displayRecipe(recipe) {
     article.appendChild(ingredientsHeading);
     article.appendChild(ingredientsList);
 
-    //Lägg till article på sidan
-    recipeContainer.appendChild(article);
+
 
     //rubrik instruktioner
     const instructionsHeading = document.createElement("h4");
@@ -178,4 +194,6 @@ function displayRecipe(recipe) {
     article.appendChild(instructionsHeading);
     article.appendChild(instructionsList);
 
+    //Lägg till article på sidan
+    recipeContainer.appendChild(article);
 }
